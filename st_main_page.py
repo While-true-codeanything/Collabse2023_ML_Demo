@@ -16,10 +16,10 @@ st.subheader("Напишите Вашу идею/описание проекта
 
 tags_str = ""
 
-TEXT_TONE = "http://37.230.196.85:8080/api/v0/ml/text-tone"
-KEY_WORDS = "http://37.230.196.85:8080/api/v0/ml/key-words"
-SKILLS_URL = "http://37.230.196.85:8080/api/v0/ml/categories"
-NEWS_URL = "TODO"
+TEXT_TONE = "http://89.232.160.227:8080/api/v0/ml/text-tone"
+KEY_WORDS = "http://89.232.160.227:8080/api/v0/ml/key-words"
+SKILLS_URL = "http://89.232.160.227:8080/api/v0/ml/categories"
+NEWS_URL = "http://89.232.160.227:8080/api/v0/ml/news"
 
 text = st.text_area("Tags", label_visibility="hidden")
 detected_tags = st.empty()
@@ -75,4 +75,20 @@ if st.button("Отправить", key="Semantic"):
                     "Текст слишком короткий :( Напишите подробнее, иначе выделение семантики не будет работать. Учтите, что чем больше  обьем текста, тем точнее будет работать данная модель. Введите не меньше 50 символов")
             else:
                 detected_semantic.subheader(request_tags(TEXT_TONE, semantic))
+                st.success("Готово!")
+
+st.subheader("Напишите текст новости и мы определим ее общую тематику")
+
+news_theme = st.text_area("Тематика новости", key="News_theme_area", label_visibility="hidden")
+detected_news_theme = st.empty()
+if st.button("Отправить", key="News_theme"):
+    if news_theme != "":
+        with st.spinner("🤖 Наш ИИ подбирает тему новости..."):
+            if len(news_theme) > 1500:
+                news_theme = news_theme[:1500]
+            if len(news_theme) < 40:
+                st.error(
+                    "Текст слишком короткий :( Напишите подробнее, иначе выделение тематики новости не будет работать")
+            else:
+                detected_news_theme.subheader(request_tags(NEWS_URL, news_theme)[0])
                 st.success("Готово!")
